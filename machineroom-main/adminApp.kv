@@ -1,0 +1,444 @@
+#:kivy 2.0.0
+
+<AdminScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'horizontal'
+            BoxLayout:
+                orientation: 'vertical'
+                # spacing: [20, 20]
+                padding: [40]
+                Label:
+                    id: instructions1
+                    text: 'Please Enter\nStudent ID Below'
+                    halign: 'center'
+                    font_size: '20sp'
+                LimitText:
+                    id: id_input
+                    text: ''
+                    background_color: (1, 0, 1, 0.5)
+                    font_size: '20sp'
+                    write_tab: False
+            BoxLayout:
+                orientation: 'vertical'
+                # spacing: [15, 15]
+                padding: [30]
+                Label:
+                    id: instructions2
+                    text: 'Please Enter\nStudent Name Below'
+                    halign: 'center'
+                    font_size: '20sp'
+                TextInput:
+                    id: name_input
+                    text: ''
+                    background_color: (1, 0, 1, 0.5)
+                    font_size: '20sp'
+                    write_tab: False
+            GridLayout:
+                id: gridButtons
+                rows: 6
+                cols: 1
+                spacing: [15]
+                padding: [30]
+                on_size: root.scaleFont()
+                Button:
+                    id: add
+                    text: 'Add'
+                    background_color: root.red
+                    font_size: '25sp'
+                    on_press: root.addStudent()
+                Button:
+                    id: update
+                    text: 'Update'
+                    background_color: root.red
+                    font_size: '25sp'
+                    on_press: root.updateStudent()
+                Button:
+                    id: remove
+                    text: 'Remove'
+                    background_color: root.red
+                    font_size: '25sp'
+                    on_press: root.removeStudent()
+                Button:
+                    id: viewMachines
+                    text: 'Manage Students'
+                    background_color: root.red
+                    font_size: '23sp'
+                    on_press:
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = 'access'
+                Button:
+                    id: viewLogs
+                    text: 'View Logs'
+                    background_color: root.red
+                    font_size: '25sp'
+                    on_press: 
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = 'log'
+                Button:
+                    id: kill
+                    text: 'Kill Switch'
+                    background_color: root.ksColor()
+                    font_size: '25sp'
+                    on_press: 
+                        root.killswitch()
+                        root.toggleColorKs(self.background_color)
+    
+
+        GridLayout:
+            rows: 2
+            cols: 4
+            spacing: [5]
+            padding: [10]
+            Button:
+                id: 1
+                name: 1
+                text: root.machines[self.name - 1]
+                background_normal: ''
+                background_color: root.red
+                font_size: '20sp'
+                on_press: root.toggleColor(self.name, self.background_color)
+            Button:
+                id: 2
+                name: 2
+                text: root.machines[self.name - 1]
+                background_normal: ''
+                background_color: root.red
+                font_size: '20sp'
+                on_press: root.toggleColor(self.name, self.background_color)
+            Button:
+                id: 3
+                name: 3
+                text: root.machines[self.name - 1]
+                background_normal: ''
+                background_color: root.red
+                font_size: '20sp'
+                on_press: root.toggleColor(self.name, self.background_color)
+            Button:
+                id: 4
+                name: 4
+                text: root.machines[self.name - 1]
+                background_normal: ''
+                background_color: root.red
+                font_size: '20sp'
+                on_press: root.toggleColor(self.name, self.background_color)
+            Button:
+                id: 5
+                name: 5
+                text: root.machines[self.name - 1]
+                background_normal: ''
+                background_color: root.red
+                font_size: '20sp'
+                on_press: root.toggleColor(self.name, self.background_color)
+            Button:
+                id: 6
+                name: 6
+                text: root.machines[self.name - 1]
+                background_normal: ''
+                background_color: root.red
+                font_size: '20sp'
+                on_press: root.toggleColor(self.name, self.background_color)
+            Button:
+                id: 7
+                name: 7
+                text: root.machines[self.name - 1]
+                background_normal: ''
+                background_color: root.red
+                font_size: '20sp'
+                on_press: root.toggleColor(self.name, self.background_color)
+            Button:
+                id: 8
+                name: 8
+                text: root.machines[self.name - 1]
+                background_normal: ''
+                background_color: root.red
+                font_size: '20sp'
+                on_press: root.toggleColor(self.name, self.background_color)
+
+
+<LogScreen>:
+    rv: rv
+    BoxLayout:
+        orientation: 'vertical'
+        canvas:
+            Color:
+                rgba: 0.3, 0.3, 0.3, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        GridLayout:
+            cols: 3
+            rows: 1
+            size_hint_y: .25
+            height: dp(108) #height of child widgets
+            padding: dp(10) #distance between layout and children
+            spacing: dp(16) #distance between children
+            Button:
+                text: 'Return to Main Screen'
+                on_press:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'admin'
+            Button:
+                id: limits
+                text: 'Showing: Latest 100 Sign-Ins'
+                on_release: root.switchLimit()  
+            LogSearchBar:
+                id: search
+                hint_text:'Enter Student Name, ID, or Time'
+        GridLayout:
+            cols: 4
+            rows: 1
+            size_hint_y: .1
+            ColumnButton:
+                id: student
+                font_name: "Arial.ttf" #different font so we can use pointy triangles
+                text: 'Students '
+                on_press: self.buttonPress([root.ids.TI, root.ids.TO], 'name', root)
+            ColumnButton:
+                id: TI
+                font_name: "Arial.ttf"
+                text: 'Time In \u25BC'
+                sortState: 'down'
+                on_press: self.buttonPress([root.ids.student, root.ids.TO], 'time_in', root)
+            ColumnButton:
+                id: TO
+                font_name: "Arial.ttf"
+                text: 'Time Out '
+                on_press: self.buttonPress([root.ids.student, root.ids.TI], 'time_out', root)
+            Button:
+                font_name: "Arial.ttf"
+                text: 'Machines Used'
+                background_down: 'atlas://data/images/defaulttheme/button' #removes flash on click
+
+        RecycleView:
+            id: rv
+            scroll_type: ['bars', 'content']
+            scroll_wheel_distance: dp(114)
+            bar_width: dp(10)
+            viewclass: 'Row'
+            RecycleBoxLayout:
+                default_size: None, dp(56)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+                spacing: dp(2) 
+ 
+ 
+<Row>:
+    canvas.before: 
+        Color:
+            rgba: 0.5, 0.5, 0.5, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(-45)
+        padding: [0, -10, 0, -10]
+        Label:
+            id: name
+        Label:
+            id: sid
+            font_size: 14
+    Label:
+        id: time_in
+    Label:
+        id: time_out
+    Button:
+        id: machs
+        size_hint_y: .88
+        pos_hint: {"center_x":.5,"center_y":.5}
+        on_release: root.showMachines()
+
+
+<MachinesUsed>:
+    size_hint: .5, .5
+    title: 'Machines Used:'
+    on_open:
+        machines_used_label.text = root.update_text()
+    Label:
+        id: machines_used_label
+        #on_press: root.dismiss()
+        
+        
+<MachinesAccess>:
+    rv: rv
+    BoxLayout:
+        orientation: 'vertical'
+        canvas:
+            Color:
+                rgba: 0.3, 0.3, 0.3, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        GridLayout:
+            cols: 4
+            rows: 1
+            size_hint_y: .25
+            height: dp(108) #height of child widgets
+            padding: dp(10) #distance between layout and children
+            spacing: dp(16) #distance between children
+            Button:
+                text: 'Return to Main Screen'
+                on_press:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'admin'
+            SearchBar:
+                id: search
+                hint_text:'Enter Student Name or ID'
+        GridLayout:
+            cols: 4
+            rows: 1
+            size_hint_y: .1
+            Button:
+                id: student
+                font_name: "Arial.ttf"
+                text: 'Students'
+                background_down: 'atlas://data/images/defaulttheme/button' 
+            Button:
+                id: sid
+                font_name: "Arial.ttf"
+                text: 'ID'
+                background_down: 'atlas://data/images/defaulttheme/button' 
+            Button:
+                font_name: "Arial.ttf"
+                text: 'Machines Allowed'
+                background_down: 'atlas://data/images/defaulttheme/button' 
+
+        RecycleView:
+            id: rv
+            scroll_type: ['bars', 'content']
+            scroll_wheel_distance: dp(114)
+            bar_width: dp(10)
+            viewclass: 'AccessRow'
+            RecycleBoxLayout:
+                default_size: None, dp(56)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+                spacing: dp(2)
+
+
+<AccessRow>:
+    canvas.before: 
+        Color:
+            rgba: 0.5, 0.5, 0.5, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    Label:
+        id: name
+    Label:
+        id: sid
+    BoxLayout:
+        orientation: 'horizontal'
+        Button:
+            id: machs
+            size_hint_y: .88
+            pos_hint: {"center_x":.5,"center_y":.5}
+            on_release: root.showMachines()
+        Button:
+            id: edit
+            size_hint_y: .88
+            pos_hint: {"center_x":.5,"center_y":.5}
+            on_release: root.editMachines(root.ids.name.text, root.ids.sid.text)
+
+
+<SearchBar>:
+    readonly: False
+    multiline: False
+
+
+<MachinesAllowed>:
+    size_hint: .5, .5
+    title: 'Machines Allowed:'
+    on_open:
+        machines_allowed_label.text = root.update_text()
+    Label:
+        id: machines_allowed_label
+
+
+<LoginScreen>:
+    FloatLayout:
+        TextInput:
+            id: passcode
+            password: True
+            multiline: False
+            focus: True
+            font_size: '22sp'
+            size_hint_x: .25
+            size_hint_y: .1
+            hint_text: 'Enter Passcode +\nPress Enter'
+            pos_hint: {'center_x': .5, 'y': 0.5}
+            text_validate_unfocus: False
+            on_text_validate: 
+                root.enterPass(root.ids.passcode.text)
+                root.ids.passcode.text = ''
+        CheckBox:
+            id: checkbox
+            background_checkbox_normal: 'images/unchecked.png'
+            background_checkbox_down: 'images/checked.png'
+            size_hint: None, None
+            size: (40,40)
+            pos: (passcode.x+passcode.width, passcode.y)
+            on_active: root.checkbox_click(self,self.active)
+        Label:
+            id: checkbox_instructions
+            size_hint: None, None #idk why we need this
+            pos: (checkbox.x+2*checkbox.width, checkbox.y-checkbox.height) #not sure why this works but it does
+            text: 'Click to show password'
+        Label:
+            id: message
+            text: ''
+            size_hint: .25, .1
+            pos: (passcode.x, passcode.y-message.height)
+            font_size: '20sp'
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'bottom'
+        Button:
+            text: 'Change Password'
+            size_hint: (.3,.15)
+            on_release: 
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'changePass'
+
+
+
+<ChangePassScreen>:
+    BoxLayout:
+        padding: [40]
+        # spacing: [20, 20]
+        orientation: 'vertical'
+        TextInput:
+            id: lastPassInput
+            # password: True
+            multiline: False
+            focus: True
+            font_size: '25sp'
+            hint_text: 'Enter Last Password'
+            write_tab: False
+        TextInput:
+            id: newPassInput
+            # password: True
+            multiline: False
+            focus: True
+            font_size: '25sp'
+            hint_text: 'Enter New Password'
+            write_tab: False
+        GridLayout:
+            rows: 1
+            cols: 2
+            Button:
+                text: 'Cancel'
+                on_release:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'login'
+            Button:
+                text: 'Change Password'
+                on_release: 
+                    root.changePass(root.ids.lastPassInput.text, root.ids.newPassInput.text)
+            
